@@ -7,10 +7,10 @@ begin
     gemspec.email       = "aaron.gibralter@gmail.com"
     gemspec.homepage    = "http://github.com/agibralter/ar-resque-counter-cache"
     gemspec.authors     = ["Aaron Gibralter"]
+    gemspec.files       = Dir.glob("lib/**/*") + %w(README.md LICENSE)
     gemspec.add_dependency("activerecord", "~> 2.3.5")
     gemspec.add_dependency("resque", "~> 1.10.0")
     gemspec.add_dependency("resque-lock-timeout", "~> 0.2.1")
-    gemspec.files.exclude("pkg")
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

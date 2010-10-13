@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ar-resque-counter-cache}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Aaron Gibralter"]
@@ -13,20 +13,15 @@ Gem::Specification.new do |s|
   s.description = %q{Increment ActiveRecord's counter cache column asynchronously using Resque (and resque-lock-timeout).}
   s.email = %q{aaron.gibralter@gmail.com}
   s.extra_rdoc_files = [
-    "README.md"
+    "LICENSE",
+     "README.md"
   ]
   s.files = [
-    "README.md",
-     "Rakefile",
-     "VERSION",
+    "LICENSE",
+     "README.md",
      "lib/ar-resque-counter-cache.rb",
      "lib/ar_resque_counter_cache/active_record.rb",
-     "lib/ar_resque_counter_cache/increment_counters_worker.rb",
-     "spec/ar_resque_counter_cache/active_record_spec.rb",
-     "spec/integration_spec.rb",
-     "spec/models.rb",
-     "spec/redis-test.conf",
-     "spec/spec_helper.rb"
+     "lib/ar_resque_counter_cache/increment_counters_worker.rb"
   ]
   s.homepage = %q{http://github.com/agibralter/ar-resque-counter-cache}
   s.rdoc_options = ["--charset=UTF-8"]
