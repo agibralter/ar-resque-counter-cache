@@ -1,3 +1,5 @@
+require 'after_commit'
+
 module ArAsyncCounterCache
 
   module ActiveRecord
@@ -49,7 +51,7 @@ module ArAsyncCounterCache
             ArAsyncCounterCache::IncrementCountersWorker.cache_and_enqueue(parent_class, parent_id, column, :increment)
           end
         end
-        after_create(method_name)
+        after_commit_on_create(method_name)
         # Define after_destroy callback method.
         method_name = "#{base_method_name}_after_destroy".to_sym
         define_method(method_name) do
@@ -57,7 +59,7 @@ module ArAsyncCounterCache
             ArAsyncCounterCache::IncrementCountersWorker.cache_and_enqueue(parent_class, parent_id, column, :decrement)
           end
         end
-        after_destroy(method_name)
+        after_commit_on_destroy(method_name)
       end
 
       def async_counter_cache_column(opt)
