@@ -37,16 +37,16 @@ describe "integration" do
     @post1.reload.count_of_comments.should == 0
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "User", 2, "comments_count"]
+    # [ArAsyncCounterCache::IncrementCountersWorker, "Post", 1, "count_of_comments"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 0
     @user2.reload.posts_count.should == 0
-    @user2.reload.comments_count.should == 2
-    @post1.reload.count_of_comments.should == 0
+    @user2.reload.comments_count.should == 0
+    @post1.reload.count_of_comments.should == 2
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "Post", 1, "count_of_comments"]
+    # [ArAsyncCounterCache::IncrementCountersWorker, "User", 2, "comments_count"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 0
