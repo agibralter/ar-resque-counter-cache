@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "activerecord", "~> 2.3.5"
-  s.add_dependency "resque", "~> 1.10.0"
+  s.add_dependency "resque", "~> 1.10"
   s.add_dependency "resque-lock-timeout", "~> 0.2.1"
   s.add_dependency "after_commit", "~> 1.0.6"
 
