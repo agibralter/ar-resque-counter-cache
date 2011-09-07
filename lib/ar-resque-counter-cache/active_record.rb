@@ -7,7 +7,7 @@ module ArAsyncCounterCache
         reflection = self.class.reflect_on_association(association_id)
         parent_class = reflection.klass
         column = self.class.async_counter_types[association_id]
-        if parent_id = send(reflection.primary_key_name)
+        if parent_id = send(reflection.foreign_key)
           ArAsyncCounterCache::IncrementCountersWorker.cache_and_enqueue(parent_class, parent_id, column, dir)
         end
       end
@@ -29,7 +29,7 @@ module ArAsyncCounterCache
           # Let's make the column read-only like the normal belongs_to
           # counter_cache.
           parent_class.send(:attr_readonly, column.to_sym) if defined?(parent_class) && parent_class.respond_to?(:attr_readonly)
-          parent_id_column = reflection.primary_key_name
+          parent_id_column = reflection.foreign_key
           add_callbacks(parent_class.to_s, parent_id_column, column)
         end
       end
