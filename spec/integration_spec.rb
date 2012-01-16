@@ -28,7 +28,7 @@ describe "integration" do
     # 3 for comments incrementing posts' comments counts
     Resque.size(:testing).should == 8
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "User", 1, "posts_count"]
+    # [ArResqueCounterCache::IncrementCountersWorker, "User", 1, "posts_count"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 0
@@ -37,7 +37,7 @@ describe "integration" do
     @post1.reload.count_of_comments.should == 0
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "Post", 1, "count_of_comments"]
+    # [ArResqueCounterCache::IncrementCountersWorker, "Post", 1, "count_of_comments"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 0
@@ -46,7 +46,7 @@ describe "integration" do
     @post1.reload.count_of_comments.should == 2
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "User", 2, "comments_count"]
+    # [ArResqueCounterCache::IncrementCountersWorker, "User", 2, "comments_count"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 0
@@ -55,7 +55,7 @@ describe "integration" do
     @post1.reload.count_of_comments.should == 2
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "User", 1, "comments_count"]
+    # [ArResqueCounterCache::IncrementCountersWorker, "User", 1, "comments_count"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 1
@@ -64,7 +64,7 @@ describe "integration" do
     @post1.reload.count_of_comments.should == 2
     @post2.reload.count_of_comments.should == 0
 
-    # [ArAsyncCounterCache::IncrementCountersWorker, "Post", 2, "count_of_comments"]
+    # [ArResqueCounterCache::IncrementCountersWorker, "Post", 2, "count_of_comments"]
     perform_next_job
     @user1.reload.posts_count.should == 2
     @user1.reload.comments_count.should == 1

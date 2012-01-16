@@ -4,7 +4,7 @@ require "ar-resque-counter-cache/version"
 
 Gem::Specification.new do |s|
   s.name        = "ar-resque-counter-cache"
-  s.version     = ArAsyncCounterCache::VERSION
+  s.version     = ArResqueCounterCache::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Aaron Gibralter"]
   s.email       = ["aaron.gibralter@gmail.com"]

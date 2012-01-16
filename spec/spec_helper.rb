@@ -32,7 +32,7 @@ Resque.redis = '127.0.0.1:9736'
 
 RSpec.configure do |config|
   config.before(:all) do
-    ArAsyncCounterCache.resque_job_queue = :testing
+    ArResqueCounterCache.resque_job_queue = :testing
   end
   config.before(:each) do
     ActiveRecord::Base.silence { CreateModelsForTest.migrate(:up) }

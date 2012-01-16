@@ -1,7 +1,7 @@
 require 'resque'
 require 'resque-lock-timeout'
 
-module ArAsyncCounterCache
+module ArResqueCounterCache
 
   # The default Resque queue is :counter_caches.
   def self.resque_job_queue=(queue)
@@ -25,7 +25,7 @@ module ArAsyncCounterCache
     end
   end
 
-  # ArAsyncCounterCache will very quickly increment a counter cache in Redis,
+  # ArResqueCounterCache will very quickly increment a counter cache in Redis,
   # which will then later be updated by a Resque job. Using
   # require-lock-timeout, we can ensure that only one job per ___ is running
   # at a time.
@@ -43,7 +43,7 @@ module ArAsyncCounterCache
       elsif direction == :decrement
         redis.decr(key)
       else
-        raise ArgumentError, "Must call ArAsyncCounterCache::IncrementCountersWorker with :increment or :decrement"
+        raise ArgumentError, "Must call ArResqueCounterCache::IncrementCountersWorker with :increment or :decrement"
       end
       ::Resque.enqueue(self, parent_class, id, column)
     end
