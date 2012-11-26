@@ -69,6 +69,11 @@ module ArResqueCounterCache
         if options[:async_counter_cache]
           add_async_counter_cache_callbacks(reflection)
         end
+        # At this point the standard counter cache callbacks will not be added;
+        # however, we need the `:counter_cache` option to be present so that
+        # `ActiveRecord::Base.reset_counters` works correctly (as of
+        # activerecord 3.2.9).
+        options[:counter_cache] = true
         reflection
       end
 
