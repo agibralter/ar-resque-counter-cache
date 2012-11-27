@@ -44,5 +44,22 @@ describe ArResqueCounterCache::ActiveRecord do
       user.reload
       user.posts_count.should eq(10)
     end
+
+    it "should allow normal counter caches" do
+      user.dogs.create(:name => "Ruff")
+      user.reload
+      user.dogs_count.should eq(1)
+    end
+
+    it "should allow non-counter caches" do
+      user2 = User.create(:name => "Sam")
+      cat = user.cats.create(:name => "Missy")
+      # Transfership of ownership would trigger counter cache methods... it
+      # should do nothing here.
+      cat.user = user2
+      cat.save!
+      user.cats.size.should eq(0)
+      user2.cats.size.should eq(1)
+    end
   end
 end

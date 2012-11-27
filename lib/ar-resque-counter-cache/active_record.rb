@@ -73,7 +73,7 @@ module ArResqueCounterCache
         # however, we need the `:counter_cache` option to be present so that
         # `ActiveRecord::Base.reset_counters` works correctly (as of
         # activerecord 3.2.9).
-        options[:counter_cache] = true
+        options[:counter_cache] = true if options[:async_counter_cache]
         reflection
       end
 
