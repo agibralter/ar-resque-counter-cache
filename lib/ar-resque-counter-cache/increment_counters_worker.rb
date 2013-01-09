@@ -1,5 +1,5 @@
 require 'resque'
-require 'resque-lock-timeout'
+require 'resque-loner'
 
 module ArResqueCounterCache
 
@@ -7,13 +7,6 @@ module ArResqueCounterCache
   def self.resque_job_queue=(queue)
     IncrementCountersWorker.class_eval do
       @queue = queue
-    end
-  end
-
-  # The default lock_timeout is 60 seconds.
-  def self.resque_lock_timeout=(lock_timeout)
-    IncrementCountersWorker.class_eval do
-      @lock_timeout = lock_timeout
     end
   end
 
@@ -26,14 +19,13 @@ module ArResqueCounterCache
   end
 
   # ArResqueCounterCache will very quickly increment a counter cache in Redis,
-  # which will then later be updated by a Resque job. Using
-  # require-lock-timeout, we can ensure that only one job per ___ is running
-  # at a time.
+  # which will then later be updated by a Resque job. Using require-loner, we
+  # can ensure that only one job per payload is enqueued at a time.
   class IncrementCountersWorker
 
-    extend ::Resque::Plugins::LockTimeout
+    include Resque::Plugins::UniqueJob
     @queue = :counter_caches
-    @lock_timeout = 60
+    @loner_ttl = 3600 # Don't hold lock for more than 1 hour...
 
     def self.cache_and_enqueue(parent_class, id, column, direction)
       parent_class = parent_class.to_s
@@ -57,33 +49,9 @@ module ArResqueCounterCache
       args.join('-')
     end
 
-    # Try again later if lock is in use.
-    def self.lock_failed(*args)
-      ::Resque.enqueue(self, *args)
-    end
-
     # args: (parent_class, id, column)
     def self.cache_key(*args)
       "ar-resque-counter-cache:#{identifier(*args)}"
-    end
-
-    # The name of this method ensures that it runs within around_perform_lock.
-    #
-    # We've leveraged resque-lock-timeout to ensure that only one job is
-    # running at a time. Now, this around filter essentially ensures that only
-    # one job per parent-column can sit on the queue at once. Since the
-    # cache_key entry in redis stores the most up-to-date delta for the
-    # parent's counter cache, we don't have to actually perform the
-    # Klass.update_counters for every increment/decrement. We can batch
-    # process!
-    def self.around_perform_lock1(*args)
-      # Remove all other instances of this job (with the same args) from the
-      # queue. Uses LREM (http://code.google.com/p/redis/wiki/LremCommand) which
-      # takes the form: "LREM key count value" and if count == 0 removes all
-      # instances of value from the list.
-      redis_job_value = ::Resque.encode(:class => self.to_s, :args => args)
-      ::Resque.redis.lrem("queue:#{@queue}", 0, redis_job_value)
-      yield
     end
 
     def self.perform(parent_class, id, column)

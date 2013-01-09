@@ -18,11 +18,15 @@ How does ar-resque-counter-cache address these issues? It uses Redis as a
 temporary counter cache and Resque to actually update the counter cache column
 sometime in the future. For example, let's say a single Post gets 1000 comments
 very quickly. This will set a key in Redis indicating that there is a delta of
-+1000 for that Post's comments_count column. It will also queue 1000 Resque
-jobs. This is where resque-lock-timeout comes in. Only one of those jobs will
-be allowed to run at a time. Once a job acquires the lock it removes all other
-instances of that job from the queue (see
-IncrementCountersWorker.around\_perform\_lock1).
++1000 for that Post's comments_count column. Previously (in versions 3.0.2 and
+below), it would also queue 1000 Resque jobs. This is where resque-lock-timeout
+came in. Only one of those jobs will be allowed to run at a time. Once a job
+acquires the lock it removes all other instances of that job from the queue
+(see IncrementCountersWorker.around\_perform\_lock1) using Redis's lrem
+command. Unfortunately we ran into some giant Redis cpu overload with lrems
+during traffic spikes and decided to switch to the simpler resque-loner gem.
+This gem instead uses a key to determine whether or not to enqueue a given job
+in the first place.
 
 You use it like such:
 

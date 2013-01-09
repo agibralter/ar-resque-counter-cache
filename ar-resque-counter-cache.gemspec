@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Aaron Gibralter"]
   s.email       = ["aaron.gibralter@gmail.com"]
   s.homepage    = "http://github.com/agibralter/ar-resque-counter-cache"
-  s.summary     = %q{Increment ActiveRecord's counter cache column asynchronously using Resque (and resque-lock-timeout).}
-  s.description = %q{Increment ActiveRecord's counter cache column asynchronously using Resque (and resque-lock-timeout).}
+  s.summary     = %q{Increment ActiveRecord's counter cache column asynchronously using Resque (and resque-loner).}
+  s.description = %q{Increment ActiveRecord's counter cache column asynchronously using Resque (and resque-loner).}
 
   s.rubyforge_project = "ar-resque-counter-cache"
 
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "activerecord", "~> 3.2"
   s.add_dependency "resque", "~> 1.0"
-  s.add_dependency "resque-lock-timeout", "~> 0.4"
+  s.add_dependency "resque-loner", "~> 1.2"
 
   s.add_development_dependency "rspec", "~> 2.4.0"
   s.add_development_dependency "sqlite3-ruby", "~> 1.3.3"

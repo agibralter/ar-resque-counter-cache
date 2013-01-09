@@ -24,9 +24,9 @@ describe "integration" do
     @post2.count_of_comments.should == 0
 
     # 2 for posts incrementing users' posts counts
-    # 3 for comments incrementing users' comments counts
-    # 3 for comments incrementing posts' comments counts
-    Resque.size(:testing).should == 8
+    # 1 for comments incrementing users' comments counts
+    # 2 for comments incrementing posts' comments counts
+    Resque.size(:testing).should == 5
 
     # [ArResqueCounterCache::IncrementCountersWorker, "User", 1, "posts_count"]
     perform_next_job
