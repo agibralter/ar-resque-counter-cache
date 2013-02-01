@@ -23,8 +23,8 @@ describe "integration" do
     @post1.count_of_comments.should == 0
     @post2.count_of_comments.should == 0
 
-    # 2 for posts incrementing users' posts counts
-    # 1 for comments incrementing users' comments counts
+    # 1 for posts incrementing users' posts counts
+    # 2 for comments incrementing users' comments counts
     # 2 for comments incrementing posts' comments counts
     Resque.size(:testing).should == 5
 
